@@ -1,39 +1,29 @@
-'''
-CFD ME702 Step 3 // 1D Diffusion // heat equation if u = temp
-
-in this eq:  exponentially damped wave
-Using: Forward Diff in time from n to n+1
-       Central Diff in space from i+1 to i-1
-Initial conditions: u=2 at 0.5<= x <=1
-                    u=1 everywhere else in (0,2)
-Boundary conditions: u=1 at x=0, x=2
-'''
+# Step 3 1D Diffusion
+# Dmitriy Bruder
+# 07/02/2015
 
 import numpy as np
 import matplotlib.pyplot as plt
-#import time as sys
+import math as mth
 
-#%matplotlib inline #dispay results in line in ipython notebook
-"""init variables"""
-nx = 41#number of points in the grid
-dx = 2.0/(nx-1) #distance between adjacent grid points (dx) 0.05 * 50 steps
+nx = 41 #number of space steps
 nt = 20 #number of time steps
-nu = .3 #viscosity term
-sigma = 0.2 #Courant number, insures stability
-dt = sigma*dx**2/nu #lenght of time step, dt is calculated with respect to dx
+nu = 0.3 #viscous term
+sigma = 0.2 #CFL
+dx = 2.0/(nx-1) #incrament of space
+dt = sigma*dx**2/nu #incrament of time
 
-"""establish initial conditions"""
-u = np.ones(nx) #define an array which with nx elements in lenght
-u[0.5/dx : 1/dx+1]=2 # initial condition u = 2 at 0.5 <= x <= 1
+u = np.ones(nx)
 
-plt.plot(np.linspace(0,2,nx),u) #plot the initial condition
+u[0.5/dx : 1/dx-1]=2
 
-un = np.ones(nx) #init temporary array to store the values of u @ time n
-for n in range(nt): #run the loop nt times (0 to nt) iterate in time
-    un = u.copy() #copy the value of u(array) into un(array)
-    for i in range(1,nx-1):
-       """the main eq"""       
-       u[i] = un[i]+nu*dt/dx**2*(un[i+1]-2*un[i]+un[i-1])
-       
-print u       
-plt.plot(np.linspace(0,2,nx),u);
+plt.plot(np.linspace(0,2,nx),u) #plot initial condition
+
+un = np.ones(nx)
+
+for n in range(nt):
+    un = u.copy()
+    for i in range(nx-1):
+        u[i] = un[i]+nu*dt/dx**2*(un[i+1]-2*un[i]+un[i-1])
+plt.plot(np.linspace(0,2,nx),u) #plot numerical solution
+plt.show() #necessary to display plot in ipython console
