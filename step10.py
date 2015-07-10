@@ -58,7 +58,7 @@ def plot2d(x, y, p):
                            cmap=cm.coolwarm, linewidth=0, antialiased=False)
     # set plot limits
     ax.set_xlim(0, 2)
-    ax.set_ylim(0, 1)
+    ax.set_ylim(0, 2)
     # set initial viewing angle
     ax.view_init(30, 225)
     plt.show()
